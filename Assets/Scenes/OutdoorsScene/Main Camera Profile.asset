@@ -49,13 +49,13 @@ MonoBehaviour:
     m_Value: 1
   k1:
     m_OverrideState: 1
-    m_Value: 0.25
+    m_Value: 0.322
   k2:
     m_OverrideState: 1
-    m_Value: 0
+    m_Value: 0.416
   k3:
     m_OverrideState: 1
-    m_Value: 0
+    m_Value: -0.793
   t1:
     m_OverrideState: 1
     m_Value: 0
@@ -64,4 +64,4 @@ MonoBehaviour:
     m_Value: 0
   noiseIntensity:
     m_OverrideState: 1
-    m_Value: 0.322
+    m_Value: 0.421
