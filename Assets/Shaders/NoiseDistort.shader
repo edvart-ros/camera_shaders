@@ -66,7 +66,8 @@ Shader "Hidden/Shader/NoiseDistort"
         return float2(z0, z1);
     }
 
-    float2 getUndistorted(float2 p, float2 c, float3 K, float2 P){
+    float2 getUndistorted(float2 p, float3 K, float2 P){
+        const float2 c = float2(0.5, 0.5);
         const float x_d = p.x; const float y_d = p.y;
         const float x_c = c.y; const float y_c = c.y;
         const float r = sqrt(pow(p.x-c.x, 2) + pow(p.y-c.y, 2));
@@ -81,25 +82,30 @@ Shader "Hidden/Shader/NoiseDistort"
     }
 
 
+    bool outOfBounds(float2 uv){
+        return (uv.x <= 0 || uv.x >= 1 || uv.y <= 0 || uv.y >= 1);
+    }
+
+    float4 AddNoise(float4 color, float2 uv){
+        float2 sample = GaussianRandom(uv);
+        float noise = clamp(sample.x, -1.0, 1.0)*_noise_intensity;
+        return color*(1-noise);
+    }
+
 
     float4 CustomPostProcess(Varyings i) : SV_Target
     {
         UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(i);
 
+        //apply distortion
         const float2 xy_d = float2(i.texcoord[0], i.texcoord[1]);
-        const float2 xy_c = float2(0.5, 0.5);
-        const float2 xy_u = getUndistorted(xy_d, xy_c, float3(_K1, _K2, _K3), float2(_T1, _T2));
+        const float2 xy_u = getUndistorted(xy_d, float3(_K1, _K2, _K3), float2(_T1, _T2));
+        if (outOfBounds(xy_u)) return 0.0;
         
-        
-        if (xy_u.x <= 0 || xy_u.x >= 1 || xy_u.y <= 0 || xy_u.y >= 1){
-            return float4(0.0, 0.0, 0.0, 1.0);
-        }
         
         uint2 positionSS = xy_u * _ScreenSize.xy;
         float4 color = LOAD_TEXTURE2D_X(_MainTex, positionSS);
-        float2 sample = GaussianRandom(i.texcoord);
-        float noise = clamp(sample.x, -1.0, 1.0)*_noise_intensity;
-        color = color*(1+noise);
+        color = AddNoise(color, i.texcoord);
         return float4(color.xyz, 1.0);
     }
 
