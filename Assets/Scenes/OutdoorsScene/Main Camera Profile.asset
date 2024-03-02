@@ -43,19 +43,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd2234d1d6447d243b90c2b1a5cfcd4d, type: 3}
   m_Name: NoiseDistort
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
   activate:
     m_OverrideState: 1
     m_Value: 1
   k1:
     m_OverrideState: 1
-    m_Value: 0.322
+    m_Value: 0.8
   k2:
     m_OverrideState: 1
-    m_Value: 0.416
+    m_Value: -0.43
   k3:
     m_OverrideState: 1
-    m_Value: -0.793
+    m_Value: 0
   t1:
     m_OverrideState: 1
     m_Value: 0
@@ -63,5 +63,5 @@ MonoBehaviour:
     m_OverrideState: 1
     m_Value: 0
   noiseIntensity:
-    m_OverrideState: 1
-    m_Value: 0.421
+    m_OverrideState: 0
+    m_Value: 0.6
