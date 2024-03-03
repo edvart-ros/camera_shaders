@@ -55,6 +55,7 @@ Shader "Hidden/Shader/Depth"
     } 
 
     // List of properties to control your post process effect
+    float _Intensity;
     TEXTURE2D_X(_MainTex);
     TEXTURE2D(_DepthTexture);
 

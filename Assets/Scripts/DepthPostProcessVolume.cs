@@ -8,7 +8,6 @@ public sealed class Depth : CustomPostProcessVolumeComponent, IPostProcessCompon
 {
     public BoolParameter activate = new BoolParameter(false);
     Material m_Material;
-
     public bool IsActive() => m_Material != null && activate.value;
 
     public override CustomPostProcessInjectionPoint injectionPoint => CustomPostProcessInjectionPoint.AfterPostProcess;
