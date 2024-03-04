@@ -35,7 +35,8 @@ Shader "Unlit/NoiseDistortDepth"
             float4 _TL;
             float4 _TR;
             float4 _BR;
-            float _noise_intensity;
+            float _depth_angle_noise_gain;
+            float _flat_noise;
             float4 _OutOfBoundColour = float4(0.0, 0.0, 0.0, 1.0);
         
             float4 GetViewVec(float4 bottomLeft, float4 topLeft, float4 bottomRight, float4 topRight, float2 uv){
@@ -131,10 +132,10 @@ Shader "Unlit/NoiseDistortDepth"
                 
                 float towardsCameraFactor = -dot(viewVec, normal);
                 if (towardsCameraFactor <= 0){
-                    color = AddNoise(color, xy_u, 0);
+                    color = AddNoise(color, xy_u, _flat_noise);
                 }
                 else{
-                    color = AddNoise(color, xy_u, 1-towardsCameraFactor);
+                    color = AddNoise(color, xy_u, _flat_noise + _depth_angle_noise_gain*(1-towardsCameraFactor));
                 }
 
                 return color.x;

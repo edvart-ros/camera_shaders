@@ -14,7 +14,9 @@ public class ProcessRenderTexture : MonoBehaviour
     private Camera cam;
 
     [Range(0.0f, 1.0f)]
-    public float noiseIntensity = 0.0f;
+    public float flatNoise = 0.0f;
+    [Range(0.0f, 1.0f)]
+    public float depthAngleNoiseGain = 0.0f;
     [Range(-1.0f, 1.0f)]
     public float K1 = 0.0f;
     [Range(-1.0f, 1.0f)]
@@ -55,6 +57,7 @@ public class ProcessRenderTexture : MonoBehaviour
             mat.SetVector("_TL", normCorners[1]);
             mat.SetVector("_TR", normCorners[2]);
             mat.SetVector("_BR", normCorners[3]);
+            mat.SetFloat("_depth_angle_noise_gain", depthAngleNoiseGain);
         }
         mat.SetTexture("_MainTex", inputRenderTexture);
         mat.SetFloat("_K1", K1);
@@ -62,7 +65,7 @@ public class ProcessRenderTexture : MonoBehaviour
         mat.SetFloat("_K3", K3);
         mat.SetFloat("_T1", T1);
         mat.SetFloat("_T2", T2);
-        mat.SetFloat("_noise_intensity", noiseIntensity);
+        mat.SetFloat("_flat_noise", flatNoise);
         Graphics.Blit(inputRenderTexture, outputRenderTexture, mat);
     }
 }
