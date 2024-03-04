@@ -1,0 +1,36 @@
+// Each #kernel tells which function to compile; you can have many kernels
+#pragma kernel CSMain
+
+// Create a RenderTexture with enableRandomWrite flag and set it
+// with cs.SetTexture
+RWTexture2D<float4> Left;
+RWTexture2D<float4> Right;
+RWTexture2D<float4> Result;
+
+
+
+[numthreads(8,8,1)]
+void CSMain (uint3 id : SV_DispatchThreadID)
+{
+    float minError = 1000.0;
+    int minErrorX = -1;
+    float error = 0;
+
+    // get the reference pixel greyscale value from left image
+    float4 refC = Left[id.xy];
+    float refG = (Left[id.xy].x + Left[id.xy].y + Left[id.xy].z)/3.0;
+    float4 candC;
+    float candG;
+    // check all pixels in pixel row
+    for (int i = 0; i < 127; i++){
+        candC = Right[int2(i, id.y)];
+        candG = (candC.x + candC.y + candC.z)/3.0;
+        error = abs(refG-candG);// + abs(int(id.x)-i)/300.0;;
+        if (error < minError){
+            minErrorX = i;
+            minError = error;
+        }
+    }
+    float disparity = (id.x-minErrorX)/127.0;
+    Result[id.xy] = float4(disparity, disparity, disparity, 1);
+}
